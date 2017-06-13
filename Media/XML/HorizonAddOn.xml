@@ -1,0 +1,29 @@
+<titlePackXML projectenviro="Storm">
+	<global>
+		<News color="f00"/>
+		<Logo path="file://Media\Images\Logo.png" />
+		<Background path="" />
+		<BackgroundImage path="file://Media\Images\PackImage.png" />
+		<Music path="file://Media/Nadeo/Musics/StormMenu.ogg" />
+		<Style MainTitlePolice="TextTitle3" SectionsPolice="TextRaceMessageBig" />
+	</global>
+
+	<Multiplayer logo="file://Media/MEDIABROWSER_HiddenResources/Common/Images/Menus/Buttons/Logo_Online.dds" activated="True" color="c39" allowallmodes="False">
+		
+	</Multiplayer>
+	<LocalPlay logo="file://Media/MEDIABROWSER_HiddenResources/Common/Images/Menus/Buttons/Logo_LocalPlay.dds" activated="True" color="0f8">
+			<asset id="LocalNetHack" isdefault="yes" titlename="Local Network" isvisibleinmaker="True"/>
+
+	</LocalPlay>
+	<Editors logo="file://Media/MEDIABROWSER_HiddenResources/Common/Images/Menus/Buttons/Logo_Editor.dds" activated="True" color="48e" mapeditor="">
+	<asset id="NewMap" isdefault="yes" titlename=""/>
+	<asset id="EditReplay" isdefault="yes" titlename=""/>
+	<asset id="TitleTools" isdefault="yes" titlename=""/>
+
+	</Editors>
+	<Ingame accelcoef="1." controlcoef="1." gravitycoef="1.">
+	</Ingame>
+	<Profile>
+		<param id="0" MonParam="aaa" />
+	</Profile>
+</titlePackXML>

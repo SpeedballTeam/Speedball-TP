@@ -1,0 +1,30 @@
+x = 100% done
++ = done but keep an eye on
+
+
+=== 4.1 === (Not done)
+
+    x Enabled same walljumps.
+    
+    x Remove blocks, they aren't needed in the tp anymore.
+    
+    x Switched to Base/ModeMatchmaking instead of ModeMatchmaking.
+
+    
+=== 3.0 === (Not uploaded to store, released to major servers)
+
+	x Warmup2 implemented.
+    
+	x Warmup/Pause vote from the Manage Server menu (the current round will end in a draw).
+    
+	x Default rounds limit changed to 7.
+    
+	x Default option for friendly fire is now enabled.
+    
+	x Default warmup duration changed to 10 seconds (the countdown when everyone is ready).
+    
+	x Default phase times changed to 4-2-2 (normal-reduction-instant, in minutes).
+    
+	+ Ballbug quick fix but disabled (updates 3d markers every tick; need to optimize it before enabeling).
+    
+	x Confirmed instant heal for ball carrier is a Nadeo bug (there is a way to go around it but it needs a lot of work).

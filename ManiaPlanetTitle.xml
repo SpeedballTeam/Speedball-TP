@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<maniaplanet_title version="4">
+	<id>SpeedBall@steeffeen</id>
+	<name>SpeedBall</name>
+	<desc>Made in maker 'Storm Maker'</desc>
+	<url></url>
+	<download_url></download_url>
+	<title_version></title_version>
+	<base>SMStorm</base>
+	<player_model>ArenaPlayer</player_model>
+	<scriptcloud_enabled>false</scriptcloud_enabled>
+	<packaging>
+		<image name="Media\Images\PackImage.png"/>
+		<logos name="Media\Images\Logos.png"/>
+		<collection></collection>
+		<sortindex>100</sortindex>
+		<station_manialink url=""/>
+		<station_noquickenter>false</station_noquickenter>
+		<boxcase_manialink url=""/>
+	</packaging>
+	<menu>
+		<background_img name="MenuBg.jpg"/>
+		<background_replay name=""/>
+		<header name="MenuHeader.png"/>
+		<music name=""/>
+		<manialink url="Media/Apps/MainMenuLagoon.Script.txt"/>
+	</menu>
+	<menu_style name=""/>
+	<music folder=""/>
+	<mod name=""/>
+	<editor>
+		<maptype name="MapTypes\ShootMania\SpeedBallArena.Script.txt"/>
+		<simple_editor_map name=""/>
+		<internalitems/>
+	</editor>
+	<solo>
+		<!-- either campaign or playlist-->
+		<mode name=""/>
+		<datapack name=""/>
+		<default_maprecord_type>2</default_maprecord_type>
+		<score_context>
+			<name></name>
+			<maprecord_type>2</maprecord_type>
+			<medals_enabled>true</medals_enabled>
+			<compute_medals_from_maprecord>true</compute_medals_from_maprecord>
+			<author_medals_enabled>true</author_medals_enabled>
+			<skillpoints_enabled>true</skillpoints_enabled>
+		</score_context>
+		<score_context>
+			<name>AscendingScore</name>
+			<maprecord_type>0</maprecord_type>
+			<medals_enabled>true</medals_enabled>
+			<compute_medals_from_maprecord>true</compute_medals_from_maprecord>
+			<author_medals_enabled>true</author_medals_enabled>
+			<skillpoints_enabled>true</skillpoints_enabled>
+		</score_context>
+		<score_context>
+			<name>DescendingScore</name>
+			<maprecord_type>1</maprecord_type>
+			<medals_enabled>true</medals_enabled>
+			<compute_medals_from_maprecord>true</compute_medals_from_maprecord>
+			<author_medals_enabled>true</author_medals_enabled>
+			<skillpoints_enabled>true</skillpoints_enabled>
+		</score_context>
+		<score_context>
+			<name>NumberOfRespawns</name>
+			<maprecord_type>3</maprecord_type>
+			<medals_enabled>true</medals_enabled>
+			<compute_medals_from_maprecord>true</compute_medals_from_maprecord>
+			<author_medals_enabled>true</author_medals_enabled>
+			<skillpoints_enabled>true</skillpoints_enabled>
+		</score_context>
+	</solo>
+	<network>
+		<mode name="Modes\ShootMania\SpeedBall.Script.txt"/>
+		<playlist name="SMStormSpeedBall.txt"/>
+	</network>
+	<splitscreen>
+		<mode name=""/>
+		<playlist name=""/>
+	</splitscreen>
+	<files/>
+	<folders/>
+	<allowed_client_title_version></allowed_client_title_version>
+	<maker>SMStormMaker@nadeo</maker>
+	<limit_camera_fov>false</limit_camera_fov>
+	<use_hmd>false</use_hmd>
+	<unlock_features>0</unlock_features>
+	<hud3dfont name=""/>
+</maniaplanet_title>
