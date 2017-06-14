@@ -18,20 +18,16 @@
 *												   *
 \**************************************************/
 
-// CALLBACKS
-#Extends "Modes/ShootMania/Base/ModeShootmania.Script.txt"
+// MATCHKING
+#Extends "Modes/ShootMania/Base/ModeMatchmaking.Script.txt"
 
 /***************************************************
 *	SCRIPT INFO									   *
 ***************************************************/
 
 #Const	ScriptName			"SpeedBall.Script.txt"
-#Const	Version				"3.1-3 (2017-05-17)"
+#Const	Version				"3.1-2 (2017-05-12)"
 #Const	CompatibleMapTypes	"SpeedBallArena,SpeedBallTitleArena"
-
-
-// TODO: 
-// * Find suitable place to put UpdateHud3dMarkers() once the ballbug is figured out.
 
 
 /***************************************************
@@ -52,7 +48,6 @@
 #Include "Libs/steeffeen/ShootMania/SpeedBallXmlRpc.Script.txt" as SBXmlRpc
 #Include "Libs/steeffeen/TeamStats.Script.txt" 					as TeamStats 
 #Include "Libs/steeffeen/Tools.Script.txt" 						as Tools
-#Include "Libs/Nadeo/ScoresTable3.Script.txt"                   as ST2
 
 
 /***************************************************
@@ -67,7 +62,7 @@
 #Setting S_RoundGapToWin		2	   as _("Score gap to win a map")
 #Setting S_RoundsLimit			7	   as _("Score limit per map")
 #Setting S_BestOfXMatch			0	   as _("Play best of X maps")
-#Setting S_UseWarmUp			True   as _("Start maps with warmup")
+#Setting S_UseWarmUp			False  as _("Start maps with warmup")
 #Setting S_DefaultCaptureTime	1.6	   as   "<hidden>"  // Default (not-reduced) capture time
 
 // Teams
@@ -92,18 +87,18 @@
 #Setting S_NbBotsRed			0	   as  "<hidden>"  // Number of bots of team red
 
 // Work in progress
-#Setting S_SpawnProtectionTime	2	   as  "<hidden>"  // Spawn protection in seconds
+#Setting S_SpawnProtectionTime	0	   as  "<hidden>"  // Spawn protection in seconds
 
 
 /***************************************************
 *	COMMANDS									   *
 ***************************************************/
 
-#Command Command_CurrentMapPointsClan1 (Integer) as _("Current map points of team 1")
-#Command Command_CurrentMapPointsClan2 (Integer) as _("Current map points of team 2")
-#Command Command_MatchPointsClan1      (Integer) as _("Current match points of team 1")
-#Command Command_MatchPointsClan2      (Integer) as _("Current match points of team 2")
-#Command Command_ForceWarmUp           (Boolean) as _("Set pause")
+#Command Cmd_MapPointsClan1	  (Integer)	as _("Set current Map Points of Team 1")
+#Command Cmd_MapPointsClan2	  (Integer)	as _("Set current Map Points of Team 2")
+#Command Cmd_MatchPointsClan1 (Integer)	as _("Set current Match Points of Team 1")
+#Command Cmd_MatchPointsClan2 (Integer)	as _("Set current Match Points of Team 2")
+#Command Cmd_ForcePause       (Boolean) as _("Start pause")
 
 
 /***************************************************
@@ -176,20 +171,20 @@ declare Real[Integer]			G_MaxCapturePercentage;	 // Maximum capture percentage r
 *	LOG VERSION									   *
 ***************************************************/
 
-***Match_LogVersions***
+***LogVersion***
 ***
-	Log::RegisterScript(ScriptName, Version);
-	Log::RegisterScript(CustomUI::GetScriptName(), CustomUI::GetScriptVersion());
-	Log::RegisterScript(Interface::GetScriptName(), Interface::GetScriptVersion());
-	Log::RegisterScript(Message::GetScriptName(), Message::GetScriptVersion());
-	Log::RegisterScript(Score::GetScriptName(), Score::GetScriptVersion());
-	Log::RegisterScript(SM::GetScriptName(), SM::GetScriptVersion());
-	Log::RegisterScript(SBXmlRpc::GetScriptName(), SBXmlRpc::GetScriptVersion());
-	Log::RegisterScript(SpawnScreen::GetScriptName(), SpawnScreen::GetScriptVersion());
-	Log::RegisterScript(Tabs::GetScriptName(), Tabs::GetScriptVersion());
-	Log::RegisterScript(Top::GetScriptName(), Top::GetScriptVersion());
-	Log::RegisterScript(Victory::GetScriptName(), Victory::GetScriptVersion());
-	Log::RegisterScript(WarmUp2::GetScriptName(), WarmUp2::GetScriptVersion());
+	MB_LogVersion(ScriptName, Version);
+	MB_LogVersion(CustomUI::GetScriptName(), CustomUI::GetScriptVersion());
+	MB_LogVersion(Interface::GetScriptName(), Interface::GetScriptVersion());
+	MB_LogVersion(Message::GetScriptName(), Message::GetScriptVersion());
+	MB_LogVersion(Score::GetScriptName(), Score::GetScriptVersion());
+	MB_LogVersion(SM::GetScriptName(), SM::GetScriptVersion());
+	MB_LogVersion(SBXmlRpc::GetScriptName(), SBXmlRpc::GetScriptVersion());
+	MB_LogVersion(SpawnScreen::GetScriptName(), SpawnScreen::GetScriptVersion());
+	MB_LogVersion(Tabs::GetScriptName(), Tabs::GetScriptVersion());
+	MB_LogVersion(Top::GetScriptName(), Top::GetScriptVersion());
+	MB_LogVersion(Victory::GetScriptName(), Victory::GetScriptVersion());
+	MB_LogVersion(WarmUp2::GetScriptName(), WarmUp2::GetScriptVersion());
 ***
 
 
@@ -214,7 +209,7 @@ declare Real[Integer]			G_MaxCapturePercentage;	 // Maximum capture percentage r
 *	RULES										   *
 ***************************************************/
 
-***Match_Rules***
+***Rules***
 ***
 	if (SpawnInvulnerabilityDuration != S_SpawnProtectionTime * 1000)
 		SpawnInvulnerabilityDuration = S_SpawnProtectionTime * 1000;
@@ -249,7 +244,7 @@ declare Real[Integer]			G_MaxCapturePercentage;	 // Maximum capture percentage r
 *	LOBBY START SERVER							   *
 ***************************************************/
 
-***Match_StartServer***
+***LobbyStartServer***
 ***
 	MM_SetFormat([S_NbPlayersPerTeamMax, S_NbPlayersPerTeamMax]);
 	
@@ -267,18 +262,21 @@ declare Real[Integer]			G_MaxCapturePercentage;	 // Maximum capture percentage r
 *	START SERVER								   *
 ***************************************************/
 
-***Match_StartServer***
+***StartServer***
 ***
 	// Load objects
 	ItemList_Begin();
+		//DEVchange
 		G_BallItemId = ItemList_Add("SpeedBall/Ball.Item.gbx");
 	ItemList_End();
 
 	// Load actions
 	ActionList_Begin();
+		//DEVchange
 		G_RocketBallActionId = ActionList_Add("RocketBall.Action.Gbx");
 	ActionList_End();
 
+	// Matchmaking mode
 	if (MM_IsMatchServer()) {
 		MM_Init([S_NbPlayersPerTeamMax, S_NbPlayersPerTeamMax]);
 	}
@@ -420,7 +418,7 @@ declare Real[Integer]			G_MaxCapturePercentage;	 // Maximum capture percentage r
 *	START MAP									   *
 ***************************************************/
 
-***Match_StartMatch***
+***StartMatch***
 ***
 	G_ClanMapScores = [1 => 0, 2 => 0];
 	if (S_BestOfXMatch > 0) {
@@ -439,7 +437,7 @@ declare Real[Integer]			G_MaxCapturePercentage;	 // Maximum capture percentage r
 *	INIT MAP									   *
 ***************************************************/
 
-***Match_InitMap***
+***InitMap***
 ***
 	MB_UseIntro = !MM_IsMatchServer();
 ***
@@ -449,7 +447,7 @@ declare Real[Integer]			G_MaxCapturePercentage;	 // Maximum capture percentage r
 *	START MAP									   *
 ***************************************************/
 
-***Match_StartMap***
+***StartMap***
 ***
 
 	// UI
@@ -506,7 +504,7 @@ declare Real[Integer]			G_MaxCapturePercentage;	 // Maximum capture percentage r
 		}
 	}
 
-	---Match_Rules---
+	---Rules---
 	
 	UseSameWallJump = True;
 
@@ -542,7 +540,7 @@ declare Real[Integer]			G_MaxCapturePercentage;	 // Maximum capture percentage r
 *	START ROUND									   *
 ***************************************************/
 
-***Match_StartRound***
+***StartRound***
 ***
 
 	// Create objects
@@ -639,6 +637,11 @@ declare Real[Integer]			G_MaxCapturePercentage;	 // Maximum capture percentage r
 
 ***PlayLoop***
 ***
+
+	// TODO: This is a bad way of doing it
+	// Quick fix for ballbug
+	//UpdateHud3dMarkers();
+
 	// Stop match if there are not enough players left in matchmaking
 	if (MM_IsMatchServer()) {
 		if (MM_RestartMatchmaking || ClansNbPlayers[1] <= 0 || ClansNbPlayers[2] <= 0) {
@@ -824,23 +827,24 @@ declare Real[Integer]			G_MaxCapturePercentage;	 // Maximum capture percentage r
 			}
 			case CSmModeEvent::EType::OnCommand: {
 				switch (Event.CommandName) {
-					case "Command_CurrentMapPointsClan1": {
+					case "Cmd_MapPointsClan1": {
 						ClanScores[1] = Event.CommandValueInteger;
 						PassOn(Event);
 					}
-					case "Command_CurrentMapPointsClan2": {
+					case "Cmd_MapPointsClan2": {
 						ClanScores[2] = Event.CommandValueInteger;
 						PassOn(Event);
 					}
-					case "Command_MatchPointsClan1": {
+					case "Cmd_MatchPointsClan1": {
 						G_ClanMapScores[1] = Event.CommandValueInteger;
 						PassOn(Event);
 					}
-					case "Command_MatchPointsClan2": {
+					case "Cmd_MatchPointsClan2": {
 						G_ClanMapScores[2] = Event.CommandValueInteger;
 						PassOn(Event);
 					}
-					case "Command_ForceWarmUp": {
+					case "Cmd_ForcePause": {
+						//WARMUP
 						DoWarmup();
 					}
 					default: {
@@ -2528,15 +2532,13 @@ Void CheckSettings() {
 		Bots::SetPower(S_BotPower);
 	}
 	
-	//Update rules or footer?
+	// Update rules or footer?
 	if (UpdateRules) {
 		---Rules---
 	}
-	
 	if (UpdateFooter) {
 		ST2::SetFooterText(TextLib::Compose(_("Rounds to win: %1 (Limit: %2)"), TextLib::ToText(Last_RoundsToWin), TextLib::ToText(Last_RoundsLimit)));
 	}
-	
 }
 
 // Perform warm up session
@@ -2592,7 +2594,7 @@ Void DoWarmup() {
 	declare StopWarmUp = False;
 	
 	while (!WarmUp2::Stop() && !StopWarmUp && (EndTime <= 0 || Now < EndTime) && !MatchEndRequested && !ServerShutdownRequested
-		/*&& !MB_StopServer && !MB_StopMatch && !MB_StopMap*/) {
+		&& !MB_StopServer && !MB_StopMatch && !MB_StopMap) {
 		
 		MB_Yield();
 		WarmUp2::Loop();
